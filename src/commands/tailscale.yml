@@ -14,6 +14,10 @@ parameters:
     type: string
     description: Tags that tailscale should advertised
     default: tag:ci
+  tailscale_domain:
+    type: string
+    description: Define tailscale domain used to configure proxy command $HOME/.ssh/config
+    default: auroch-cloud.ts.net
 
 steps:
   - run:
@@ -39,3 +43,11 @@ steps:
             --hostname=${HOSTNAME} \
             --accept-routes \
             --timeout=10s
+
+  - run:
+      name: Configure ssh client
+      command: |
+          echo "# tailscale hosts configuration" >> $HOME/.ssh/config
+          echo "Host *.<< parameters.tailscale_domain >>" >> $HOME/.ssh/config
+          echo "   StrictHostKeyChecking no" >> $HOME/.ssh/config
+          echo "   ProxyCommand /usr/bin/nc -v -x 127.0.0.1:1055 %h %p" >> $HOME/.ssh/config
