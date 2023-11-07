@@ -2,15 +2,15 @@ description: >
   Install and connect to Tailscale network
 
 parameters:
-  tailscale-auth-key:
+  tailscale_auth_key:
     type: env_var_name
     description: Your Tailscale authentication key, from the admin panel.
     default: TAILSCALE_AUTH_KEY
-  tailscale-proxy-address:
+  tailscale_proxy_address:
     type: string
     description: Proxy address where tailscale should listen.
     default: 127.0.0.1:1055
-  tailscale-advertise-tags:
+  tailscale_advertise_tags:
     type: string
     description: Tags that tailscale should advertised
     default: tag:ci
@@ -27,7 +27,7 @@ steps:
           tailscaled \
             --tun=userspace-networking \
             --socket=/tmp/tailscaled.sock \
-            --socks5-server=<< parameters.tailscale-proxy-address >>
+            --socks5-server=<< parameters.tailscale_proxy_address >>
       background: true
 
   - run:
@@ -36,8 +36,8 @@ steps:
           HOSTNAME="circleci-$(cat /etc/hostname)"
           tailscale up \
             --socket=/tmp/tailscaled.sock \
-            --authkey ${<< parameters.tailscale-auth-key >>} \
-            --advertise-tags=<< parameters.tailscale-advertise-tags >> \
+            --authkey ${<< parameters.tailscale_auth_key >>} \
+            --advertise-tags=<< parameters.tailscale_advertise_tags >> \
             --hostname=${HOSTNAME} \
             --accept-routes \
             --timeout=10s
