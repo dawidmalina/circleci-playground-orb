@@ -47,6 +47,8 @@ steps:
   - run:
       name: Configure ssh client
       command: |
+          mkdir -p $HOME/.ssh/
+
           echo "# tailscale hosts configuration" > $HOME/.ssh/config
           echo "Host *.<< parameters.tailscale_domain >>" >> $HOME/.ssh/config
           echo "   StrictHostKeyChecking no" >> $HOME/.ssh/config
