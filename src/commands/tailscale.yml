@@ -24,11 +24,20 @@ steps:
   - run:
       name: Start Tailscale
       command: |
-          tailscaled --tun=userspace-networking --socket=/tmp/tailscaled.sock --socks5-server=<< parameters.tailscale-proxy-address >>
+          tailscaled \
+            --tun=userspace-networking \
+            --socket=/tmp/tailscaled.sock \
+            --socks5-server=<< parameters.tailscale-proxy-address >>
       background: true
 
   - run:
       name: Tailscale Up
       command: |
           HOSTNAME="circleci-$(cat /etc/hostname)"
-          tailscale --socket=/tmp/tailscaled.sock up --authkey ${<< parameters.tailscale-auth-key >>} --advertise-tags=<< parameters.tailscale-advertise-tags >> --hostname=${HOSTNAME} --accept-routes --timeout=10s
+          tailscale up \
+            --socket=/tmp/tailscaled.sock \
+            --authkey ${<< parameters.tailscale-auth-key >>} \
+            --advertise-tags=<< parameters.tailscale-advertise-tags >> \
+            --hostname=${HOSTNAME} \
+            --accept-routes \
+            --timeout=10s
